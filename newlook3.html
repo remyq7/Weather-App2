@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <title>Weather in Your City</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&family=Lobster&display=swap"
+      rel="stylesheet"
+    />
+
+    <script
+      src="https://kit.fontawesome.com/3eacad0ff0.js"
+      crossorigin="anonymous"
+    ></script>
+    <style>
+      body {
+        background-image: url(images/cherryblossoms.jpg);
+        background-position: center;
+        background-image: fixed;
+        background-size: 100%;
+      }
+
+      h1 {
+        font-family: "Dancing Script";
+        text-align: center;
+        margin-top: 10px;
+      }
+
+      .city-all {
+        display: inline;
+        text-align: center;
+        margin: 5px;
+      }
+      .main-submit {
+        display: inline;
+        position: relative;
+        top: -40px;
+        right: 20px;
+        bottom: 0px;
+        left: 600px;
+      }
+
+      button {
+        position: relative;
+        top: -40px;
+        right: 20px;
+        bottom: 0px;
+        left: 650px;
+        cursor: pointer;
+      }
+      button:hover {
+        background: #add1f5;
+        color: #000;
+      }
+
+      #city {
+        background: #f785a3;
+        color: #fff;
+        font-size: 75px;
+        padding: 2px;
+      }
+
+      .alert-primary {
+        text-align: left;
+        margin: 0 50px;
+      }
+
+      .card {
+        text-align: center;
+        color: #1e79cb;
+        margin: 10px auto;
+      }
+
+      .weather-details {
+        list-style: none;
+        text-align: center;
+        padding: 0;
+        margin: 0 auto;
+      }
+
+      .list-group {
+        list-style: none;
+        color: #1e79cb;
+        position: relative;
+        text-align: center;
+        top: 50px;
+        bottom: 0;
+        left: 250px;
+        right: 200px;
+        padding: 0;
+        width: 100%;
+        margin: 0;
+      }
+
+      .cloudy {
+        color: #f5db21;
+        font-size: 50px;
+      }
+
+      .sun {
+        color: #f5db21;
+        font-size: 50px;
+      }
+      h4 {
+        text-align: center;
+        color: #311646;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <form class="search-form" id="search-form">
+        <div class="city-all">
+          <div class="col-6">
+            <input
+              type="search"
+              placeholder="Type city here"
+              autofocus="on"
+              id="city-input"
+              class="form-control"
+            />
+          </div>
+          <div class="main-submit">
+            <input type="submit" value="Search" class="btn btn-light" />
+          </div>
+        </div>
+
+        <button
+          type="button"
+          class="btn btn-primary"
+          id="current-location-button"
+        >
+          Current
+        </button>
+      </form>
+      <h1 id="city"></h1>
+
+      <div class="card" style="width: 22rem">
+        <div class="card-body">
+          <h2 class="card-title">Thursday</h2>
+          <h3 class="card-text">
+            <span class="temperature" id="temperature">66 </span
+            ><span class="celsius" id="celsius"> °C </span>
+          </h3>
+          <div class="cloudy">
+            <i class="fas fa-cloud-sun"></i>
+          </div>
+        </div>
+
+        <ul class="weather-details">
+          <li><span id="description"></span></li>
+          <li>Humidity: <span id="humidity"></span>%</li>
+          <li>Wind: <span id="wind"></span>mph</li>
+        </ul>
+      </div>
+
+      <ul class="list-group list-group-horizontal">
+        <li class="list-group-item">
+          Friday
+          <p>85 °F</p>
+          <div class="sun"><i class="fas fa-sun"></i></div>
+        </li>
+        <li class="list-group-item">
+          Saturday
+          <p>80 °F</p>
+          <div class="sun"><i class="fas fa-sun"></i></div>
+        </li>
+        <li class="list-group-item">
+          Sunday
+          <p>82 °F</p>
+          <div class="sun"><i class="fas fa-sun"></i></div>
+        </li>
+        <li class="list-group-item">
+          Monday
+          <p>82 °F</p>
+          <div class="sun"><i class="fas fa-sun"></i></div>
+        </li>
+        <li class="list-group-item">
+          Tuesday
+          <p>82 °F</p>
+          <div class="sun"><i class="fas fa-sun"></i></div>
+        </li>
+        <li class="list-group-item">
+          Wednesday
+          <p>82 °F</p>
+          <div class="sun"><i class="fas fa-sun"></i></div>
+        </li>
+      </ul>
+    </div>
+    <script>
+      let now = new Date();
+
+      let h2 = document.querySelector("h2");
+      let days = [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday",
+      ];
+      let day = days[now.getDay()];
+
+      let hours = now.getHours();
+      if (hours < 10) {
+        hours = `0${hours}`;
+      }
+      let minutes = now.getMinutes();
+      if (minutes < 10) {
+        minutes = `0${minutes}`;
+      }
+
+      h2.innerHTML = `${day}, ${hours}:${minutes}, `;
+
+      function displayWeatherCondition(response) {
+        event.preventDefault();
+        document.querySelector("#city").innerHTML = response.data.name;
+        document.querySelector("#temperature").innerHTML = Math.round(
+          response.data.main.temp
+        );
+        document.querySelector("#description").innerHTML =
+          response.data.weather[0].main;
+        document.querySelector("#humidity").innerHTML =
+          response.data.main.humidity;
+        document.querySelector("#wind").innerHTML = Math.round(
+          response.data.wind.speed
+        );
+      }
+
+      function searchCity(city) {
+        let apiKey = "df00ce6442112c0f15afa927a09d9e5a";
+        let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`;
+        axios.get(apiUrl).then(displayWeatherCondition);
+      }
+
+      function handleSubmit(event) {
+        event.preventDefault();
+        let city = document.querySelector("#city-input").value;
+        searchCity(city);
+      }
+      let searchForm = document.querySelector("#search-form");
+      searchForm.addEventListener("submit", handleSubmit);
+      function searchLocation(position) {
+        let apiKey = "df00ce6442112c0f15afa927a09d9e5a";
+        let apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${position.coords.latitude}&lon=${position.coords.longitude}&appid=${apiKey}&units=metric`;
+        axios.get(apiUrl).then(displayWeatherCondition);
+      }
+
+      function getCurrentLocation(event) {
+        event.preventDefault();
+        navigator.geolocation.getCurrentPosition(searchLocation);
+      }
+
+      let currentLocationButton = document.querySelector(
+        "#current-location-button"
+      );
+      currentLocationButton.addEventListener("click", getCurrentLocation);
+      searchCity("New York");
+    </script>
+    <h4>Coded by: Vy</h4>
+  </body>
+</html>
